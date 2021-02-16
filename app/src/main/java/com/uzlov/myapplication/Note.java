@@ -1,26 +1,48 @@
 package com.uzlov.myapplication;
 
+import android.os.Parcel;
+import android.os.Parcelable;
+
 import java.util.Date;
-import java.util.UUID;
 
-public class Note {
+public class Note implements Parcelable {
 
-    private UUID uuid;
     private String name;
     private String description;
-    private Date dateCreate;
-    private String autor;
+    private String dateCreate;
+    private String author;
 
     public Note(String name) {
-        this.name = name;
+        this.setName(name);
+        this.setDateCreate(new Date().toString());
+        this.setAuthor("Неизвестный");
     }
 
-    public Note(String name, String description, Date dateCreate, String autor) {
-        this.name = name;
-        this.description = description;
-        this.dateCreate = dateCreate;
-        this.autor = autor;
+    public Note(String name, String description, String dateCreate, String author) {
+        this.setName(name);
+        this.setDescription(description);
+        this.setDateCreate(dateCreate);
+        this.setAuthor(author);
     }
+
+    protected Note(Parcel in) {
+        setName(in.readString());
+        setDescription(in.readString());
+        setDateCreate(in.readString());
+        setAuthor(in.readString());
+    }
+
+    public static final Creator<Note> CREATOR = new Creator<Note>() {
+        @Override
+        public Note createFromParcel(Parcel in) {
+            return new Note(in);
+        }
+
+        @Override
+        public Note[] newArray(int size) {
+            return new Note[size];
+        }
+    };
 
     public String getName() {
         return name;
@@ -38,19 +60,32 @@ public class Note {
         this.description = description;
     }
 
-    public Date getDateCreate() {
+    public String getDateCreate() {
         return dateCreate;
     }
 
-    public void setDateCreate(Date dateCreate) {
+    public void setDateCreate(String dateCreate) {
         this.dateCreate = dateCreate;
     }
 
-    public String getAutor() {
-        return autor;
+    public String getAuthor() {
+        return author;
     }
 
-    public void setAutor(String autor) {
-        this.autor = autor;
+    public void setAuthor(String author) {
+        this.author = author;
+    }
+
+    @Override
+    public int describeContents() {
+        return 0;
+    }
+
+    @Override
+    public void writeToParcel(Parcel dest, int flags) {
+        dest.writeString(getName());
+        dest.writeString(getDescription());
+        dest.writeString(getAuthor());
+        dest.writeString(getDateCreate());
     }
 }
