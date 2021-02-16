@@ -1,0 +1,6 @@
+<resources>
+    <string name="app_name">Мои заметки</string>
+    <string name="name">Имя заметки</string>
+    <string name="autor_string">Автор</string>
+    <string name="select_new_string">Выберите новое время</string>
+</resources>
