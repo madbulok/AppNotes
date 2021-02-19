@@ -1,5 +1,5 @@
 package com.uzlov.myapplication;
 
 public interface OnChangeCurrentNote {
-    void newCurrentNote(Note note);
+    void changeNote(Note note);
 }
