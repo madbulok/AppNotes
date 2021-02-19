@@ -2,8 +2,6 @@ package com.uzlov.myapplication;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.os.Parcelable;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -13,7 +11,6 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.widget.AppCompatImageView;
-import androidx.appcompat.widget.Toolbar;
 import androidx.fragment.app.Fragment;
 
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
@@ -29,7 +26,6 @@ public class NoteFragment extends Fragment{
     private EditText etDescription;
     private FloatingActionButton fabShareNote;
     private AppCompatImageView imageNote;
-    private Toolbar toolbar;
 
     private static final String ARG_INDEX = "index";
     private Note note;
@@ -75,7 +71,6 @@ public class NoteFragment extends Fragment{
         etDescription = view.findViewById(R.id.etDescription);
         imageNote = view.findViewById(R.id.iv_image_note);
         fabShareNote = view.findViewById(R.id.fab_share_note);
-        toolbar = view.findViewById(R.id.toolbar);
     }
 
     private void initListeners() {
@@ -104,9 +99,8 @@ public class NoteFragment extends Fragment{
             picker.show(getActivity().getSupportFragmentManager(), "datePicker");
         }
 
-        picker.addOnPositiveButtonClickListener(v1 -> {
-            tvDate.setText(picker.getHour()+":" + picker.getMinute());
-        });
+        picker.addOnPositiveButtonClickListener(v1 ->
+                tvDate.setText(picker.getHour()+":" + picker.getMinute()));
     }
 
     private void fillView() {
@@ -114,6 +108,5 @@ public class NoteFragment extends Fragment{
         tvDate.setText(note.getDateCreate());
         tvName.setText(note.getName());
         etDescription.setText(note.getDescription());
-        toolbar.setTitle(note.getName());
     }
 }

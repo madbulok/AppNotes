@@ -3,4 +3,19 @@
     <string name="name">Имя заметки</string>
     <string name="autor_string">Автор</string>
     <string name="select_new_string">Выберите новое время</string>
+    <string name="popular">Популярные</string>
+    <string name="about_app">О приложении</string>
+    <string name="settings">Настройки</string>
+    <string name="share_note">Поделись заметкой</string>
+    <string name="title_activity_main_drawer">MainActivityDrawer</string>
+    <string name="navigation_drawer_open">Открыть</string>
+    <string name="navigation_drawer_close">Закрыть</string>
+    <string name="nav_header_title">Артем Мясоедов</string>
+    <string name="nav_header_subtitle">artem@android.com</string>
+    <string name="nav_header_desc">Navigation header</string>
+    <string name="action_settings">Settings</string>
+
+    <string name="menu_home">Home</string>
+    <string name="menu_gallery">Gallery</string>
+    <string name="menu_slideshow">Slideshow</string>
 </resources>
