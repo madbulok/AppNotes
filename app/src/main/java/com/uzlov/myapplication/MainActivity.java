@@ -16,6 +16,8 @@ import androidx.fragment.app.FragmentTransaction;
 import androidx.navigation.ui.AppBarConfiguration;
 
 import com.google.android.material.navigation.NavigationView;
+import com.uzlov.myapplication.ui.ListNotesFragment;
+import com.uzlov.myapplication.ui.NoteFragment;
 
 public class MainActivity extends AppCompatActivity implements OnChangeCurrentNote {
     private boolean isLandscape;
@@ -119,6 +121,15 @@ public class MainActivity extends AppCompatActivity implements OnChangeCurrentNo
         }
         isFistLaunch = false;
     }
+    private void showNewLandNote(Note currentNote) {
+        getSupportFragmentManager()
+                .beginTransaction()
+                .replace(R.id.note_desc_container, NoteFragment.newInstance(currentNote))
+                .setTransition(FragmentTransaction.TRANSIT_FRAGMENT_FADE)
+                .commit();
+
+        isFistLaunch = false;
+    }
 
     private void showPortNote(Note currentNote) {
         getSupportFragmentManager()
@@ -167,19 +178,17 @@ public class MainActivity extends AppCompatActivity implements OnChangeCurrentNo
         toolbar.setTitle(title);
     }
 
+
     @Override
-    public void newCurrentNote(Note note) {
+    public void changeNote(Note note) {
         currentNote = note;
 
         setTitleToolbar(note.getName());
 
         if (isLandscape){
-            showLandNote(currentNote);
+            showNewLandNote(currentNote);
         } else {
             showPortNewNote(currentNote);
         }
-
-        Log.e("getFragments: ", String.valueOf(getSupportFragmentManager().getFragments().size()));
-        Log.e("BackStackEntryCount: ", String.valueOf(getSupportFragmentManager().getBackStackEntryCount()));
     }
 }

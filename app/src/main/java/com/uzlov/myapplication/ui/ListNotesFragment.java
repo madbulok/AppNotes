@@ -1,4 +1,4 @@
-package com.uzlov.myapplication;
+package com.uzlov.myapplication.ui;
 
 import android.content.res.Configuration;
 import android.os.Bundle;
@@ -6,26 +6,34 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
-import android.widget.ArrayAdapter;
-import android.widget.ListView;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
+import androidx.recyclerview.widget.DividerItemDecoration;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
+
+import com.uzlov.myapplication.Note;
+import com.uzlov.myapplication.OnChangeCurrentNote;
+import com.uzlov.myapplication.OnNoteItemClick;
+import com.uzlov.myapplication.R;
+import com.uzlov.myapplication.adapters.NotesAdapter;
 
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
-public class ListNotesFragment extends Fragment implements AdapterView.OnItemClickListener , OnChangeCurrentNote{
+public class ListNotesFragment extends Fragment implements OnNoteItemClick {
 
     private static OnChangeCurrentNote onChangeCurrentNote;
-    private ListView lvNotes;
+    private RecyclerView recyclerView;
 
     private Note currentNote;
     public static final String ARG_INDEX = "index";
     private boolean isLandscape;
     private final List<Note> notes = new ArrayList<>();
+    private final NotesAdapter adapter = new NotesAdapter(this::onClick);
 
     public static ListNotesFragment newInstance(OnChangeCurrentNote onChangeNote, Note note) {
         onChangeCurrentNote = onChangeNote;
@@ -43,7 +51,10 @@ public class ListNotesFragment extends Fragment implements AdapterView.OnItemCli
         notes.add(new Note("Заметка 1", "нет ничего", new Date().toString(), "Artem"));
         notes.add(new Note("Заметка 2", "что то", new Date().toString(), "Artem"));
         notes.add(new Note("Заметка 3", "пусто", new Date().toString(), "Artem"));
-        notes.add(new Note("Продукты", "молоко и хлеб", new Date().toString(), "Artem"));
+        notes.add(new Note("Продукты", "молоко11 и хлеб", new Date().toString(), "Vitya"));
+        notes.add(new Note("Продукты2", "молоко33 и хлеб55", new Date().toString(), "Kolya"));
+        notes.add(new Note("Продукты3", "молоко2 и хлеб3", new Date().toString(), "Pavel"));
+        notes.add(new Note("Продукты4", "молоко1 и хлеб4", new Date().toString(), "Django"));
         notes.add(new Note("Заметка 5"));
     }
 
@@ -70,32 +81,21 @@ public class ListNotesFragment extends Fragment implements AdapterView.OnItemCli
         } else {
             currentNote = new Note("Первая");
         }
+
+        adapter.setNotes(notes);
     }
 
 
 
     private void initView(View view){
-        lvNotes = view.findViewById(R.id.listViewNotes);
-        lvNotes.setOnItemClickListener(this);
-
-        final String[] titles = new String[]{"Заметка 1",
-                "Заметка 2",
-                "Заметка 3",
-                "Продукты",
-                "Заметка 5"};
+        recyclerView = view.findViewById(R.id.recyclerViewNotes);
 
         // используем адаптер данных
-        ArrayAdapter<String> adapter = new ArrayAdapter<>(view.getContext(),
-                android.R.layout.simple_list_item_1, titles);
-
-        lvNotes.setAdapter(adapter);
+        recyclerView.setLayoutManager(new LinearLayoutManager(recyclerView.getContext()));
+        recyclerView.addItemDecoration(new DividerItemDecoration(recyclerView.getContext(), RecyclerView.VERTICAL));
+        recyclerView.setAdapter(adapter);
     }
 
-    @Override
-    public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-        currentNote = notes.get(position);
-        onChangeCurrentNote.newCurrentNote(currentNote);
-    }
 
     @Override
     public void onSaveInstanceState(@NonNull Bundle outState) {
@@ -104,7 +104,8 @@ public class ListNotesFragment extends Fragment implements AdapterView.OnItemCli
     }
 
     @Override
-    public void newCurrentNote(Note _note) {
-        currentNote = _note;
+    public void onClick(int position) {
+        currentNote = notes.get(position);
+        onChangeCurrentNote.changeNote(currentNote);
     }
 }

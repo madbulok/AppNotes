@@ -1,4 +1,4 @@
-package com.uzlov.myapplication;
+package com.uzlov.myapplication.ui;
 
 import android.content.Intent;
 import android.os.Bundle;
@@ -16,6 +16,8 @@ import androidx.fragment.app.Fragment;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.android.material.timepicker.MaterialTimePicker;
 import com.google.android.material.timepicker.TimeFormat;
+import com.uzlov.myapplication.Note;
+import com.uzlov.myapplication.R;
 
 
 public class NoteFragment extends Fragment{
