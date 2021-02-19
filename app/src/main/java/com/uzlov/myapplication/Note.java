@@ -16,6 +16,7 @@ public class Note implements Parcelable {
         this.setName(name);
         this.setDateCreate(new Date().toString());
         this.setAuthor("Неизвестный");
+        this.setDescription("");
     }
 
     public Note(String name, String description, String dateCreate, String author) {
@@ -25,11 +26,12 @@ public class Note implements Parcelable {
         this.setAuthor(author);
     }
 
+
     protected Note(Parcel in) {
-        setName(in.readString());
-        setDescription(in.readString());
-        setDateCreate(in.readString());
-        setAuthor(in.readString());
+        name = in.readString();
+        description = in.readString();
+        dateCreate = in.readString();
+        author = in.readString();
     }
 
     public static final Creator<Note> CREATOR = new Creator<Note>() {
@@ -83,9 +85,9 @@ public class Note implements Parcelable {
 
     @Override
     public void writeToParcel(Parcel dest, int flags) {
-        dest.writeString(getName());
-        dest.writeString(getDescription());
-        dest.writeString(getAuthor());
-        dest.writeString(getDateCreate());
+        dest.writeString(name);
+        dest.writeString(description);
+        dest.writeString(dateCreate);
+        dest.writeString(author);
     }
 }

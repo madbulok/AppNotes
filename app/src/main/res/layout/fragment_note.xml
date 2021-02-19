@@ -6,24 +6,12 @@
     android:layout_height="match_parent"
     tools:context=".NoteFragment">
 
-    <androidx.appcompat.widget.Toolbar
-        android:id="@+id/toolbar"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:background="@color/purple_500"
-        app:title="@string/app_name"
-        app:titleTextColor="@color/white"
-        android:layout_marginBottom="@dimen/dimension_description"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintLeft_toLeftOf="parent"
-        app:layout_constraintRight_toRightOf="parent"/>
-
     <androidx.appcompat.widget.AppCompatImageView
         android:id="@+id/iv_image_note"
         android:layout_width="@dimen/size_image_note"
         android:layout_height="@dimen/size_image_note"
         app:layout_constraintLeft_toLeftOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/toolbar"
+        app:layout_constraintTop_toTopOf="parent"
         app:srcCompat="@drawable/ic_account_24" />
 
     <TextView
@@ -34,7 +22,7 @@
         android:layout_marginStart="@dimen/dimension_description"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toEndOf="@+id/iv_image_note"
-        app:layout_constraintTop_toBottomOf="@id/toolbar" />
+        app:layout_constraintTop_toTopOf="parent" />
 
     <TextView
         android:id="@+id/textView_author"
@@ -82,5 +70,6 @@
         app:layout_constraintRight_toRightOf="parent"
         app:srcCompat="@drawable/ic_outline_share_24"
         android:layout_marginBottom="@dimen/dimension_description"
-        android:layout_marginEnd="@dimen/dimension_description"/>
+        android:layout_marginEnd="@dimen/dimension_description"
+        android:contentDescription="@string/share_note" />
 </androidx.constraintlayout.widget.ConstraintLayout>

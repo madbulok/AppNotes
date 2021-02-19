@@ -25,7 +25,7 @@ public class ListNotesFragment extends Fragment implements AdapterView.OnItemCli
     private Note currentNote;
     public static final String ARG_INDEX = "index";
     private boolean isLandscape;
-    private List<Note> notes = new ArrayList<>();
+    private final List<Note> notes = new ArrayList<>();
 
     public static ListNotesFragment newInstance(OnChangeCurrentNote onChangeNote, Note note) {
         onChangeCurrentNote = onChangeNote;
