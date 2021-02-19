@@ -1,23 +1,24 @@
 package com.uzlov.myapplication;
 
-import android.app.DatePickerDialog;
-import android.app.Dialog;
+import android.content.Intent;
 import android.os.Bundle;
+import android.os.Parcelable;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.appcompat.widget.AppCompatImageView;
+import androidx.appcompat.widget.Toolbar;
 import androidx.fragment.app.Fragment;
 
+import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.android.material.timepicker.MaterialTimePicker;
 import com.google.android.material.timepicker.TimeFormat;
-
 
 
 public class NoteFragment extends Fragment{
@@ -26,20 +27,15 @@ public class NoteFragment extends Fragment{
     private TextView tvName;
     private TextView tvAuthor;
     private EditText etDescription;
-
-    private OnChangeDateListener onChangeDateListener = new OnChangeDateListener() {
-        @Override
-        public void onChangeDate(String newDate) {
-            tvDate.setText(newDate);
-        }
-    };
+    private FloatingActionButton fabShareNote;
+    private AppCompatImageView imageNote;
+    private Toolbar toolbar;
 
     private static final String ARG_INDEX = "index";
-    private Note index;
+    private Note note;
 
     public static NoteFragment newInstance(Note note) {
-        NoteFragment f = new NoteFragment();    // создание
-
+        NoteFragment f = new NoteFragment();
         // Передача параметра
         Bundle args = new Bundle();
         args.putParcelable(ARG_INDEX, note);
@@ -50,10 +46,10 @@ public class NoteFragment extends Fragment{
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        if (getArguments() != null) {
-            index = getArguments().getParcelable(ARG_INDEX);
+        if (getArguments() != null && getArguments().getParcelable(ARG_INDEX) != null) {
+            note = getArguments().getParcelable(ARG_INDEX);
         } else {
-            index = new Note("Первая");
+            note = new Note("Первая");
         }
     }
 
@@ -68,6 +64,7 @@ public class NoteFragment extends Fragment{
     public void onViewCreated(@NonNull View view, Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
         initView(view);
+        initListeners();
         fillView();
     }
 
@@ -76,55 +73,47 @@ public class NoteFragment extends Fragment{
         tvName = view.findViewById(R.id.textViewName);
         tvAuthor = view.findViewById(R.id.textView_author);
         etDescription = view.findViewById(R.id.etDescription);
+        imageNote = view.findViewById(R.id.iv_image_note);
+        fabShareNote = view.findViewById(R.id.fab_share_note);
+        toolbar = view.findViewById(R.id.toolbar);
+    }
 
-        tvDate.setOnClickListener(v -> {
-            if (getActivity() != null){
+    private void initListeners() {
+        tvDate.setOnClickListener(v -> openTimePicker());
 
-                MaterialTimePicker picker =
-                        new MaterialTimePicker.Builder()
-                                .setTimeFormat(TimeFormat.CLOCK_24H)
-                                .setTitleText(R.string.select_new_string)
-                                .build();
+        fabShareNote.setOnClickListener(v -> startShareIntent());
+    }
 
-                picker.show(getActivity().getSupportFragmentManager(), "datePicker");
+    private void startShareIntent() {
+        Intent shareIntent = new Intent(Intent.ACTION_SEND);
+        shareIntent.setType("text/plain");
+        shareIntent.putExtra(Intent.EXTRA_TEXT, etDescription.getText().toString());
 
-                picker.addOnPositiveButtonClickListener(v1 -> {
-                    onChangeDateListener.onChangeDate(picker.getHour()+":" + picker.getMinute());
-                });
-            }
+        Intent chooser = Intent.createChooser(shareIntent, "Выбор приложения");
+        startActivity(chooser);
+    }
+
+    private void openTimePicker() {
+        MaterialTimePicker picker =
+                new MaterialTimePicker.Builder()
+                        .setTimeFormat(TimeFormat.CLOCK_24H)
+                        .setTitleText(R.string.select_new_string)
+                        .build();
+
+        if (getActivity() != null){
+            picker.show(getActivity().getSupportFragmentManager(), "datePicker");
+        }
+
+        picker.addOnPositiveButtonClickListener(v1 -> {
+            tvDate.setText(picker.getHour()+":" + picker.getMinute());
         });
     }
 
     private void fillView() {
-        etDescription.setText(index.getDescription());
-        tvAuthor.setText(index.getAuthor());
-        tvDate.setText(index.getDateCreate());
-        tvName.setText(index.getName());
+        tvAuthor.setText(note.getAuthor());
+        tvDate.setText(note.getDateCreate());
+        tvName.setText(note.getName());
+        etDescription.setText(note.getDescription());
+        toolbar.setTitle(note.getName());
     }
-
-
-//    public static class DatePickerFragment extends DialogFragment
-//            implements DatePickerDialog.OnDateSetListener {
-//
-//        private OnChangeDateListener onChangeDateListener;
-//
-//        public DatePickerFragment(OnChangeDateListener onChangeDateListener) {
-//            super();
-//            this.onChangeDateListener = onChangeDateListener;
-//        }
-//
-//        @Override
-//        public Dialog onCreateDialog(Bundle savedInstanceState) {
-//            final Calendar c = Calendar.getInstance();
-//            int year = c.get(Calendar.YEAR);
-//            int month = c.get(Calendar.MONTH);
-//            int day = c.get(Calendar.DAY_OF_MONTH);
-//
-//            return new DatePickerDialog(getActivity(), this, year, month, day);
-//        }
-//
-//        public void onDateSet(DatePicker view, int year, int month, int day) {
-//            onChangeDateListener.onChangeDate(day + "." + (month+1) + "." + year);
-//        }
-//    }
 }

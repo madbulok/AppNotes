@@ -1,6 +1,5 @@
 package com.uzlov.myapplication;
 
-import android.content.Intent;
 import android.content.res.Configuration;
 import android.os.Bundle;
 import android.view.LayoutInflater;
@@ -13,26 +12,27 @@ import android.widget.ListView;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
-import androidx.fragment.app.FragmentTransaction;
 
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
-public class ListNotesFragment extends Fragment implements AdapterView.OnItemClickListener {
+public class ListNotesFragment extends Fragment implements AdapterView.OnItemClickListener , OnChangeCurrentNote{
 
+    private static OnChangeCurrentNote onChangeCurrentNote;
     private ListView lvNotes;
-    public static final String CURRENT_NOTE = "CurrentNote";
+
     private Note currentNote;
     public static final String ARG_INDEX = "index";
     private boolean isLandscape;
     private List<Note> notes = new ArrayList<>();
 
-    public static ListNotesFragment newInstance(int index) {
+    public static ListNotesFragment newInstance(OnChangeCurrentNote onChangeNote, Note note) {
+        onChangeCurrentNote = onChangeNote;
         ListNotesFragment f = new ListNotesFragment();    // создание
         // Передача параметра
         Bundle args = new Bundle();
-        args.putInt(ARG_INDEX, index);
+        args.putParcelable(ARG_INDEX, note);
         f.setArguments(args);
         return f;
     }
@@ -65,43 +65,14 @@ public class ListNotesFragment extends Fragment implements AdapterView.OnItemCli
         super.onActivityCreated(savedInstanceState);
         isLandscape = getResources().getConfiguration().orientation == Configuration.ORIENTATION_LANDSCAPE;
 
-        if (savedInstanceState != null){
-            currentNote = savedInstanceState.getParcelable(CURRENT_NOTE);
+        if (savedInstanceState != null && savedInstanceState.getParcelable(ARG_INDEX) != null){
+            currentNote = savedInstanceState.getParcelable(ARG_INDEX);
         } else {
             currentNote = new Note("Первая");
         }
-
-        if (isLandscape){
-            showLandNote(currentNote);
-        }
     }
 
-    private void showNotes(Note note) {
-        if (isLandscape) {
-            showLandNote(note);
-        } else {
-            showPortNote(note);
-        }
-    }
 
-    private void showLandNote(Note note) {
-        NoteFragment fragment = NoteFragment.newInstance(note);
-
-        if (getActivity() != null){
-            getActivity().getSupportFragmentManager()
-                    .beginTransaction()
-                    .replace(R.id.note_desc_container, fragment)
-            .setTransition(FragmentTransaction.TRANSIT_FRAGMENT_FADE)
-            .commit();
-        }
-    }
-
-    private void showPortNote(Note note) {
-        Intent intent = new Intent(getContext(), DetailActivity.class);
-        // и передадим туда параметры
-        intent.putExtra(ARG_INDEX, note);
-        startActivity(intent);
-    }
 
     private void initView(View view){
         lvNotes = view.findViewById(R.id.listViewNotes);
@@ -123,12 +94,17 @@ public class ListNotesFragment extends Fragment implements AdapterView.OnItemCli
     @Override
     public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
         currentNote = notes.get(position);
-        showNotes(currentNote);
+        onChangeCurrentNote.newCurrentNote(currentNote);
     }
 
     @Override
     public void onSaveInstanceState(@NonNull Bundle outState) {
-        outState.putParcelable(CURRENT_NOTE, currentNote);
+        outState.putParcelable(ARG_INDEX, currentNote);
         super.onSaveInstanceState(outState);
+    }
+
+    @Override
+    public void newCurrentNote(Note _note) {
+        currentNote = _note;
     }
 }
