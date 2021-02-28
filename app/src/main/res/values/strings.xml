@@ -20,4 +20,9 @@
     <string name="menu_slideshow">Slideshow</string>
     <string name="action_save">Сохранить</string>
     <string name="action_remove">Удалить</string>
+    <string name="action_add">Добавить</string>
+    <string name="description">Описание</string>
+    <string name="action_select_time">Выбрать время</string>
+    <string name="key_delete">request_delete</string>
+    <string name="key_save">request_save</string>
 </resources>

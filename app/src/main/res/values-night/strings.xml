@@ -3,4 +3,7 @@
     <string name="select_new_string">Выберите новое время</string>
     <string name="action_save">Сохранить</string>
     <string name="action_remove">Удалить</string>
+    <string name="description">Описание</string>
+    <string name="action_select_time">Выбрать время</string>
+    <string name="key_delete">request_delete</string>
 </resources>
