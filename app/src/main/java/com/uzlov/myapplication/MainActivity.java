@@ -2,20 +2,20 @@ package com.uzlov.myapplication;
 
 import android.content.res.Configuration;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.ActionBarDrawerToggle;
 import androidx.appcompat.app.AppCompatActivity;
-
 import androidx.appcompat.widget.Toolbar;
 import androidx.drawerlayout.widget.DrawerLayout;
 import androidx.fragment.app.FragmentTransaction;
 import androidx.navigation.ui.AppBarConfiguration;
 
 import com.google.android.material.navigation.NavigationView;
+import com.uzlov.myapplication.ui.AddNewNoteFragment;
 import com.uzlov.myapplication.ui.ListNotesFragment;
 import com.uzlov.myapplication.ui.NoteFragment;
 
@@ -25,7 +25,6 @@ public class MainActivity extends AppCompatActivity implements OnChangeCurrentNo
     public static final String ARG_INDEX = "index";
     private boolean isFistLaunch;
     private Toolbar toolbar;
-    private AppBarConfiguration mAppBarConfiguration;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -38,7 +37,6 @@ public class MainActivity extends AppCompatActivity implements OnChangeCurrentNo
 
         if (savedInstanceState != null && savedInstanceState.getParcelable(ARG_INDEX) != null){
             currentNote = savedInstanceState.getParcelable(ARG_INDEX);
-            Log.e("MainActivity Create ", currentNote.getName());
             isFistLaunch = false;
         } else {
             currentNote = new Note("Первая");
@@ -65,18 +63,15 @@ public class MainActivity extends AppCompatActivity implements OnChangeCurrentNo
         drawer.addDrawerListener(toggle);
         toggle.syncState();
 
-        mAppBarConfiguration = new AppBarConfiguration.Builder(
-                R.id.nav_home, R.id.nav_gallery, R.id.nav_slideshow)
+        AppBarConfiguration mAppBarConfiguration = new AppBarConfiguration.Builder(
+                R.id.popular_item, R.id.settings_item, R.id.about_item)
                 .setOpenableLayout(drawer)
                 .build();
 
         NavigationView navigationView = findViewById(R.id.nav_view);
-        navigationView.setNavigationItemSelectedListener(new NavigationView.OnNavigationItemSelectedListener() {
-            @Override
-            public boolean onNavigationItemSelected(@NonNull MenuItem item) {
-                // STUB!
-                return false;
-            }
+        navigationView.setNavigationItemSelectedListener(item -> {
+            // STUB!
+            return false;
         });
     }
 
@@ -94,14 +89,16 @@ public class MainActivity extends AppCompatActivity implements OnChangeCurrentNo
             case R.id.popular_item:
                 // STUB!
                 return true;
+            case R.id.action_add_note:
+                showAddNewPostFragment();
+                return true;
         }
         return super.onOptionsItemSelected(item);
     }
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
-        getMenuInflater().inflate(R.menu.drawer_menu, menu);
-
+        getMenuInflater().inflate(R.menu.toolbar_menu, menu);
         return super.onCreateOptionsMenu(menu);
     }
 
@@ -147,6 +144,25 @@ public class MainActivity extends AppCompatActivity implements OnChangeCurrentNo
             .commit();
     }
 
+    private void showAddNewPostFragment(){
+
+        AddNewNoteFragment fragment = AddNewNoteFragment.newInstance();
+//        fragment.setOnSaveNoteListener(this);
+        if (isLandscape){
+            getSupportFragmentManager()
+                    .beginTransaction()
+                    .replace(R.id.note_desc_container, fragment)
+                    .addToBackStack(null)
+                    .commit();
+        } else {
+            getSupportFragmentManager()
+                    .beginTransaction()
+                    .replace(R.id.container_fragments, fragment)
+                    .addToBackStack(null)
+                    .commit();
+        }
+    }
+
     @Override
     public void onBackPressed() {
         setTitleToolbar(getString(R.string.app_name));
@@ -163,7 +179,6 @@ public class MainActivity extends AppCompatActivity implements OnChangeCurrentNo
     protected void onSaveInstanceState(@NonNull Bundle outState) {
         super.onSaveInstanceState(outState);
         outState.putParcelable(ARG_INDEX, currentNote);
-        Log.e("MainActivity, save", currentNote.getName());
     }
 
     @Override
@@ -171,7 +186,6 @@ public class MainActivity extends AppCompatActivity implements OnChangeCurrentNo
         super.onRestoreInstanceState(savedInstanceState);
         if (savedInstanceState.getParcelable(ARG_INDEX) == null) return;
         currentNote = savedInstanceState.getParcelable(ARG_INDEX);
-        Log.e("MainActivity, restore", currentNote.getName());
     }
 
     private void setTitleToolbar(String title){

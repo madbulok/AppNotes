@@ -5,6 +5,7 @@ import android.os.Parcel;
 import android.os.Parcelable;
 
 import java.util.Date;
+import java.util.Objects;
 
 public class Note implements Parcelable {
 
@@ -94,5 +95,19 @@ public class Note implements Parcelable {
 
     public int getImage() {
         return R.drawable.ic_account_24;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        Note note = (Note) o;
+        return name.equals(note.name) &&
+                author.equals(note.author);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(name, description, dateCreate, author);
     }
 }
