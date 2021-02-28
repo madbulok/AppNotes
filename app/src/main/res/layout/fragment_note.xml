@@ -1,10 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.constraintlayout.widget.ConstraintLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".NoteFragment">
+    android:padding="@dimen/dimension_description"
+    tools:context=".ui.NoteFragment">
 
     <androidx.appcompat.widget.AppCompatImageView
         android:id="@+id/iv_image_note"
@@ -50,7 +52,7 @@
         style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
         android:layout_width="match_parent"
         android:layout_height="0dp"
-        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintBottom_toTopOf="@id/btnSaveNote"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/iv_image_note">
@@ -62,14 +64,34 @@
             android:gravity="top" />
     </com.google.android.material.textfield.TextInputLayout>
 
-    <com.google.android.material.floatingactionbutton.FloatingActionButton
+    <com.google.android.material.button.MaterialButton
+        android:id="@+id/btnDeleteNote"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toLeftOf="@id/btnSaveNote"
+        android:text="@string/action_remove"
+        />
+
+
+    <com.google.android.material.button.MaterialButton
+        android:id="@+id/btnSaveNote"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintLeft_toRightOf="@id/btnDeleteNote"
+        app:layout_constraintRight_toLeftOf="@id/fab_share_note"
+        android:text="@string/action_save"
+        />
+
+
+    <com.google.android.material.button.MaterialButton
         android:id="@+id/fab_share_note"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintRight_toRightOf="parent"
-        app:srcCompat="@drawable/ic_outline_share_24"
-        android:layout_marginBottom="@dimen/dimension_description"
-        android:layout_marginEnd="@dimen/dimension_description"
-        android:contentDescription="@string/share_note" />
+        app:layout_constraintLeft_toRightOf="@id/btnSaveNote"
+        android:text="@string/share_note"/>
 </androidx.constraintlayout.widget.ConstraintLayout>

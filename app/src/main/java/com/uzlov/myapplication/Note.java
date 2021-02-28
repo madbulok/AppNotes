@@ -1,5 +1,6 @@
 package com.uzlov.myapplication;
 
+import android.graphics.drawable.Drawable;
 import android.os.Parcel;
 import android.os.Parcelable;
 
@@ -89,5 +90,9 @@ public class Note implements Parcelable {
         dest.writeString(description);
         dest.writeString(dateCreate);
         dest.writeString(author);
+    }
+
+    public int getImage() {
+        return R.drawable.ic_account_24;
     }
 }

@@ -13,6 +13,7 @@ import androidx.annotation.Nullable;
 import androidx.appcompat.widget.AppCompatImageView;
 import androidx.fragment.app.Fragment;
 
+import com.google.android.material.button.MaterialButton;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.android.material.timepicker.MaterialTimePicker;
 import com.google.android.material.timepicker.TimeFormat;
@@ -26,7 +27,7 @@ public class NoteFragment extends Fragment{
     private TextView tvName;
     private TextView tvAuthor;
     private EditText etDescription;
-    private FloatingActionButton fabShareNote;
+    private MaterialButton fabShareNote;
     private AppCompatImageView imageNote;
 
     private static final String ARG_INDEX = "index";
