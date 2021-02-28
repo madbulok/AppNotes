@@ -1,4 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="select_new_string">Выберите новое время</string>
+    <string name="action_save">Сохранить</string>
+    <string name="action_remove">Удалить</string>
 </resources>

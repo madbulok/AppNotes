@@ -6,7 +6,7 @@
     <string name="popular">Популярные</string>
     <string name="about_app">О приложении</string>
     <string name="settings">Настройки</string>
-    <string name="share_note">Поделись заметкой</string>
+    <string name="share_note">Поделиться</string>
     <string name="title_activity_main_drawer">MainActivityDrawer</string>
     <string name="navigation_drawer_open">Открыть</string>
     <string name="navigation_drawer_close">Закрыть</string>
@@ -18,4 +18,6 @@
     <string name="menu_home">Home</string>
     <string name="menu_gallery">Gallery</string>
     <string name="menu_slideshow">Slideshow</string>
+    <string name="action_save">Сохранить</string>
+    <string name="action_remove">Удалить</string>
 </resources>
