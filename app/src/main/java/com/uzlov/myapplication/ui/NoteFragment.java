@@ -2,11 +2,13 @@ package com.uzlov.myapplication.ui;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.EditText;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -14,13 +16,19 @@ import androidx.appcompat.widget.AppCompatImageView;
 import androidx.fragment.app.Fragment;
 
 import com.google.android.material.button.MaterialButton;
+import com.google.android.material.dialog.MaterialAlertDialogBuilder;
 import com.google.android.material.timepicker.MaterialTimePicker;
 import com.google.android.material.timepicker.TimeFormat;
-import com.uzlov.myapplication.Note;
+import com.uzlov.myapplication.model.Note;
 import com.uzlov.myapplication.R;
+import com.uzlov.myapplication.repositories.note.NoteFirestoreCallbacks;
+import com.uzlov.myapplication.repositories.note.NoteRepository;
+import com.uzlov.myapplication.repositories.note.NoteRepositoryImpl;
+
+import java.util.UUID;
 
 
-public class NoteFragment extends Fragment{
+public class NoteFragment extends Fragment implements NoteFirestoreCallbacks {
 
     private TextView tvDate;
     private TextView tvName;
@@ -33,6 +41,7 @@ public class NoteFragment extends Fragment{
 
     private static final String ARG_INDEX = "index";
     private Note note;
+    private final NoteRepository repository = new NoteRepositoryImpl(this);
 
     public static NoteFragment newInstance(Note note) {
         NoteFragment f = new NoteFragment();
@@ -49,9 +58,8 @@ public class NoteFragment extends Fragment{
         if (getArguments() != null && getArguments().getParcelable(ARG_INDEX) != null) {
             note = getArguments().getParcelable(ARG_INDEX);
         } else {
-            note = new Note("Первая");
+            note = new Note("Первая", UUID.randomUUID().toString());
         }
-        // Access a Cloud Firestore instance from your Activity
     }
 
     @Override
@@ -85,17 +93,36 @@ public class NoteFragment extends Fragment{
         btnShareNote.setOnClickListener(v -> startShareIntent());
 
         btnSaveNote.setOnClickListener(v -> {
+            Note note = new Note(UUID.randomUUID().toString(),
+                    tvName.getText().toString(),
+                    etDescription.getText().toString(),
+                    tvDate.getText().toString(),
+                    tvAuthor.getText().toString());
+
             Bundle result = new Bundle();
             result.putParcelable(ARG_INDEX, note);
 
-            getParentFragmentManager().setFragmentResult(getString(R.string.key_save), result);
+            final String name = note.getName();
+            final String description = note.getDescription();
+            final String author = note.getAuthor();
+            final String datetime = note.getDateCreate();
+            update(name, description, author, datetime);
         });
 
         btnDeleteNote.setOnClickListener(v -> {
-            Bundle result = new Bundle();
-            result.putParcelable(ARG_INDEX, note);
-            getParentFragmentManager().setFragmentResult(getString(R.string.key_delete), result);
-            requireActivity().onBackPressed();
+
+            new MaterialAlertDialogBuilder(requireContext())
+                    .setTitle(R.string.question_delete_note)
+                    .setCancelable(true)
+                    .setNegativeButton(R.string.cancel, (dialog, which) -> {
+
+                    })
+                    .setPositiveButton(R.string.delete, (dialog, which) -> {
+                        repository.onDeleteClicked(note.getId());
+                        requireActivity().onBackPressed();
+                    })
+                    .show();
+
         });
     }
 
@@ -128,5 +155,38 @@ public class NoteFragment extends Fragment{
         tvDate.setText(note.getDateCreate());
         tvName.setText(note.getName());
         etDescription.setText(note.getDescription());
+    }
+
+    private void update(@NonNull String title,
+                        @NonNull String description,
+                        @NonNull String author,
+                        @NonNull String datetime) {
+        if (!TextUtils.isEmpty(title) && !TextUtils.isEmpty(description)) {
+            if (getArguments() != null) {
+                Note note = (Note) getArguments().getParcelable(ARG_INDEX);
+                if (note != null) {
+                    repository.setNote(note.getId(), title, description, author, datetime);
+                } else {
+                    String id = UUID.randomUUID().toString();
+                    repository.setNote(id, title, description, author, datetime);
+                }
+            }
+        } else {
+            showToastMessage(getString(R.string.fields_do_not_empty));
+        }
+    }
+
+    private void showToastMessage(String msg) {
+        Toast.makeText(requireContext(), msg, Toast.LENGTH_SHORT).show();
+    }
+
+    @Override
+    public void onSuccess(@Nullable String message) {
+        showToastMessage(message);
+    }
+
+    @Override
+    public void onError(@Nullable String message) {
+        showToastMessage(message);
     }
 }

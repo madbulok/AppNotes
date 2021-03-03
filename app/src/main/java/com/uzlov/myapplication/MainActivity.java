@@ -4,7 +4,6 @@ import android.content.res.Configuration;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.ActionBarDrawerToggle;
@@ -15,9 +14,13 @@ import androidx.fragment.app.FragmentTransaction;
 import androidx.navigation.ui.AppBarConfiguration;
 
 import com.google.android.material.navigation.NavigationView;
+import com.uzlov.myapplication.interfaces.OnChangeCurrentNote;
+import com.uzlov.myapplication.model.Note;
 import com.uzlov.myapplication.ui.AddNewNoteFragment;
 import com.uzlov.myapplication.ui.ListNotesFragment;
 import com.uzlov.myapplication.ui.NoteFragment;
+
+import java.util.UUID;
 
 public class MainActivity extends AppCompatActivity implements OnChangeCurrentNote {
     private boolean isLandscape;
@@ -39,7 +42,7 @@ public class MainActivity extends AppCompatActivity implements OnChangeCurrentNo
             currentNote = savedInstanceState.getParcelable(ARG_INDEX);
             isFistLaunch = false;
         } else {
-            currentNote = new Note("Первая");
+            currentNote = new Note("Первая", UUID.randomUUID().toString());
             isFistLaunch = true;
         }
 
@@ -118,7 +121,7 @@ public class MainActivity extends AppCompatActivity implements OnChangeCurrentNo
         }
         isFistLaunch = false;
     }
-    private void showNewLandNote(Note currentNote) {
+    private void showLandNewNote(Note currentNote) {
         getSupportFragmentManager()
                 .beginTransaction()
                 .replace(R.id.note_desc_container, NoteFragment.newInstance(currentNote))
@@ -141,13 +144,13 @@ public class MainActivity extends AppCompatActivity implements OnChangeCurrentNo
             .beginTransaction()
             .replace(R.id.container_fragments, NoteFragment.newInstance(currentNote))
             .setTransition(FragmentTransaction.TRANSIT_FRAGMENT_FADE)
+            .addToBackStack(null)
             .commit();
     }
 
     private void showAddNewPostFragment(){
 
         AddNewNoteFragment fragment = AddNewNoteFragment.newInstance();
-//        fragment.setOnSaveNoteListener(this);
         if (isLandscape){
             getSupportFragmentManager()
                     .beginTransaction()
@@ -167,11 +170,12 @@ public class MainActivity extends AppCompatActivity implements OnChangeCurrentNo
     public void onBackPressed() {
         setTitleToolbar(getString(R.string.app_name));
         if (!isLandscape){
-            getSupportFragmentManager()
-                .beginTransaction()
-                .replace(R.id.container_fragments, ListNotesFragment.newInstance(this, currentNote))
-                .setTransition(FragmentTransaction.TRANSIT_FRAGMENT_FADE)
-                .commit();
+//            getSupportFragmentManager()
+//                .beginTransaction()
+//                .replace(R.id.container_fragments, ListNotesFragment.newInstance(this, currentNote))
+//                .setTransition(FragmentTransaction.TRANSIT_FRAGMENT_FADE)
+//                .commit();
+            super.onBackPressed();
         }
     }
 
@@ -200,7 +204,7 @@ public class MainActivity extends AppCompatActivity implements OnChangeCurrentNo
         setTitleToolbar(note.getName());
 
         if (isLandscape){
-            showNewLandNote(currentNote);
+            showLandNewNote(currentNote);
         } else {
             showPortNewNote(currentNote);
         }

@@ -1,9 +1,11 @@
 package com.uzlov.myapplication.ui;
 
 import android.os.Bundle;
+import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -13,19 +15,23 @@ import com.google.android.material.button.MaterialButton;
 import com.google.android.material.textfield.TextInputEditText;
 import com.google.android.material.timepicker.MaterialTimePicker;
 import com.google.android.material.timepicker.TimeFormat;
-import com.uzlov.myapplication.Note;
-import com.uzlov.myapplication.OnSaveListener;
+import com.uzlov.myapplication.model.Note;
 import com.uzlov.myapplication.R;
+import com.uzlov.myapplication.repositories.note.NoteFirestoreCallbacks;
+import com.uzlov.myapplication.repositories.note.NoteRepository;
+import com.uzlov.myapplication.repositories.note.NoteRepositoryImpl;
 
-public class AddNewNoteFragment extends Fragment {
+import java.util.UUID;
+
+public class AddNewNoteFragment extends Fragment implements NoteFirestoreCallbacks {
 
     private static String ARG_INDEX = "index";
     private TextInputEditText tvTitle;
     private TextInputEditText tvNameAutor;
     private TextInputEditText tvDescription;
     private MaterialButton btnSaveNote;
-    private OnSaveListener saveListener;
     private MaterialButton btnDatePicker;
+    private final NoteRepository repository = new NoteRepositoryImpl(this);
 
     public static AddNewNoteFragment newInstance() {
 
@@ -63,23 +69,26 @@ public class AddNewNoteFragment extends Fragment {
         btnDatePicker = view.findViewById(R.id.btnCallTimePicker);
 
         btnSaveNote.setOnClickListener(v ->{
-            Note note = new Note(tvTitle.getText().toString(),
+            Note note = new Note(UUID.randomUUID().toString(),
+                    tvTitle.getText().toString(),
                     tvDescription.getText().toString(),
                     btnDatePicker.getText().toString(),
-                    tvNameAutor.getText().toString()
-            );
+                    tvNameAutor.getText().toString());
 
             Bundle result = new Bundle();
             result.putParcelable(ARG_INDEX, note);
 
-            getParentFragmentManager().setFragmentResult(getString(R.string.key_save), result);
+            final String name = note.getName();
+            final String description = note.getDescription();
+            final String author = note.getAuthor();
+            final String datetime = note.getDateCreate();
+            update(name, description, author, datetime);
 
             if (getActivity() != null) getActivity().onBackPressed();
 
         });
         btnDatePicker.setOnClickListener(v -> openTimePicker());
     }
-
 
     private void openTimePicker() {
         MaterialTimePicker picker =
@@ -96,5 +105,38 @@ public class AddNewNoteFragment extends Fragment {
                 btnDatePicker.setText(String.format("%d:%d", picker.getHour(), picker.getMinute())));
     }
 
+    private void update(@Nullable String title,
+                        @Nullable String description,
+                        @Nullable String author,
+                        @Nullable String datetime) {
+        if (!TextUtils.isEmpty(title) && !TextUtils.isEmpty(description) &&
+                !TextUtils.isEmpty(author) && !TextUtils.isEmpty(datetime)) {
+            if (getArguments() != null) {
+                Note note = (Note) getArguments().getParcelable(ARG_INDEX);
+                if (note != null) {
+                    repository.setNote(note.getId(), title, description, author, datetime);
+                } else {
+                    String id = UUID.randomUUID().toString();
+                    repository.setNote(id, title, description, author, datetime);
+                }
+            }
+        } else {
+            showToastMessage(getString(R.string.fields_do_not_empty));
+        }
+    }
 
+
+    private void showToastMessage(String msg) {
+        Toast.makeText(requireContext(), msg, Toast.LENGTH_SHORT).show();
+    }
+
+    @Override
+    public void onSuccess(@Nullable  String message) {
+        showToastMessage(message);
+    }
+
+    @Override
+    public void onError(@Nullable  String message) {
+        showToastMessage(message);
+    }
 }

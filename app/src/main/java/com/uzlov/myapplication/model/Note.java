@@ -1,27 +1,34 @@
-package com.uzlov.myapplication;
+package com.uzlov.myapplication.model;
 
-import android.graphics.drawable.Drawable;
 import android.os.Parcel;
 import android.os.Parcelable;
+
+import com.uzlov.myapplication.R;
 
 import java.util.Date;
 import java.util.Objects;
 
 public class Note implements Parcelable {
 
+    private String id;
     private String name;
     private String description;
     private String dateCreate;
     private String author;
 
-    public Note(String name) {
+    public Note() {
+    }
+
+    public Note(String id, String name) {
+        this.setId(id);
         this.setName(name);
         this.setDateCreate(new Date().toString());
         this.setAuthor("Неизвестный");
         this.setDescription("");
     }
 
-    public Note(String name, String description, String dateCreate, String author) {
+    public Note(String id, String name, String description, String dateCreate, String author) {
+        this.setId(id);
         this.setName(name);
         this.setDescription(description);
         this.setDateCreate(dateCreate);
@@ -30,6 +37,7 @@ public class Note implements Parcelable {
 
 
     protected Note(Parcel in) {
+        id = in.readString();
         name = in.readString();
         description = in.readString();
         dateCreate = in.readString();
@@ -47,6 +55,14 @@ public class Note implements Parcelable {
             return new Note[size];
         }
     };
+
+    public void setId(String id) {
+        this.id = id;
+    }
+
+    public String getId() {
+        return id;
+    }
 
     public String getName() {
         return name;
@@ -87,6 +103,7 @@ public class Note implements Parcelable {
 
     @Override
     public void writeToParcel(Parcel dest, int flags) {
+        dest.writeString(id);
         dest.writeString(name);
         dest.writeString(description);
         dest.writeString(dateCreate);
@@ -102,12 +119,11 @@ public class Note implements Parcelable {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         Note note = (Note) o;
-        return name.equals(note.name) &&
-                author.equals(note.author);
+        return id.equals(note.id);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(name, description, dateCreate, author);
+        return Objects.hash(id, name, description, dateCreate, author);
     }
 }
