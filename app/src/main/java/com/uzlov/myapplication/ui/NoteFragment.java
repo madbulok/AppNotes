@@ -51,6 +51,7 @@ public class NoteFragment extends Fragment{
         } else {
             note = new Note("Первая");
         }
+        // Access a Cloud Firestore instance from your Activity
     }
 
     @Override

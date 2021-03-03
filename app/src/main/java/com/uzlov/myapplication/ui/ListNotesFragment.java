@@ -16,6 +16,10 @@ import androidx.recyclerview.widget.DividerItemDecoration;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.google.android.gms.tasks.OnFailureListener;
+import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.firebase.firestore.DocumentReference;
+import com.google.firebase.firestore.FirebaseFirestore;
 import com.uzlov.myapplication.Note;
 import com.uzlov.myapplication.OnChangeCurrentNote;
 import com.uzlov.myapplication.OnDeleteListener;
@@ -26,7 +30,9 @@ import com.uzlov.myapplication.adapters.NotesAdapter;
 
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 public class ListNotesFragment extends Fragment implements OnNoteItemClick, OnSaveListener, OnDeleteListener, FragmentResultListener {
 
@@ -54,6 +60,29 @@ public class ListNotesFragment extends Fragment implements OnNoteItemClick, OnSa
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        // Access a Cloud Firestore instance from your Activity
+        FirebaseFirestore db = FirebaseFirestore.getInstance();
+        Map<String, Object> user = new HashMap<>();
+        user.put("first", "Ada");
+        user.put("last", "Lovelace");
+        user.put("born", 1815);
+
+// Add a new document with a generated ID
+        db.collection("users")
+                .add(user)
+                .addOnSuccessListener(new OnSuccessListener<DocumentReference>() {
+                    @Override
+                    public void onSuccess(DocumentReference documentReference) {
+                        Log.d("TAG", "DocumentSnapshot added with ID: " + documentReference.getId());
+                    }
+                })
+                .addOnFailureListener(new OnFailureListener() {
+                    @Override
+                    public void onFailure(@NonNull Exception e) {
+                        Log.w("TAG", "Error adding document", e);
+                    }
+                });
+
         notes.add(new Note("Заметка 1", "нет ничего", new Date().toString(), "Artem"));
         notes.add(new Note("Заметка 2", "что то", new Date().toString(), "Artem"));
         notes.add(new Note("Заметка 3", "пусто", new Date().toString(), "Artem"));
