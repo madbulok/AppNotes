@@ -14,8 +14,8 @@ import com.google.android.material.textfield.TextInputEditText;
 import com.google.android.material.timepicker.MaterialTimePicker;
 import com.google.android.material.timepicker.TimeFormat;
 import com.uzlov.myapplication.Note;
-import com.uzlov.myapplication.OnSaveListener;
 import com.uzlov.myapplication.R;
+import com.uzlov.myapplication.interfaces.OnSaveListener;
 
 public class AddNewNoteFragment extends Fragment {
 
