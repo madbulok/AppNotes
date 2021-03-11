@@ -110,8 +110,16 @@ public class NoteFragment extends Fragment implements NoteFirestoreCallbacks {
         });
 
         btnDeleteNote.setOnClickListener(v -> {
-            repository.onDeleteClicked(note.getId());
-            requireActivity().onBackPressed();
+
+            new MaterialAlertDialogBuilder(requireContext())
+                    .setTitle(R.string.question_delete_note)
+                    .setCancelable(true)
+                    .setPositiveButton(R.string.delete, (dialog, which) -> {
+                        repository.onDeleteClicked(note.getId());
+                        requireActivity().onBackPressed();
+                    })
+                    .show();
+
         });
     }
 
