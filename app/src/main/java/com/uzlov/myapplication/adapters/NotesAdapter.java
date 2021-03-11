@@ -9,9 +9,9 @@ import androidx.appcompat.widget.AppCompatImageView;
 import androidx.appcompat.widget.AppCompatTextView;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.uzlov.myapplication.Note;
-import com.uzlov.myapplication.OnNoteItemClick;
 import com.uzlov.myapplication.R;
+import com.uzlov.myapplication.interfaces.OnNoteItemClick;
+import com.uzlov.myapplication.model.Note;
 
 import java.util.ArrayList;
 import java.util.List;

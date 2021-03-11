@@ -11,4 +11,5 @@
     <dimen name="card_height">100dp</dimen>
     <dimen name="item_font_size">20sp</dimen>
     <dimen name="padding_textedit">16dp</dimen>
+    <dimen name="btn_size_text">12sp</dimen>
 </resources>

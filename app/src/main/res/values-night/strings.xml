@@ -6,4 +6,8 @@
     <string name="description">Описание</string>
     <string name="action_select_time">Выбрать время</string>
     <string name="key_delete">request_delete</string>
+    <string name="fields_do_not_empty">Поля не могут быть пустые</string>
+    <string name="cancel">Отмена</string>
+    <string name="delete">Удалить</string>
+    <string name="question_delete_note">Удалить заметку?</string>
 </resources>
