@@ -1,4 +1,6 @@
-package com.uzlov.myapplication;
+package com.uzlov.myapplication.ui;
+
+import com.uzlov.myapplication.model.Note;
 
 @FunctionalInterface
 public interface OnSaveListener {
