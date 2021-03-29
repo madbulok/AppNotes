@@ -16,12 +16,11 @@ import androidx.recyclerview.widget.DividerItemDecoration;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.uzlov.myapplication.OnChangeCurrentNote;
 import com.uzlov.myapplication.R;
 import com.uzlov.myapplication.adapters.NotesAdapter;
-import com.uzlov.myapplication.interfaces.OnChangeCurrentNote;
 import com.uzlov.myapplication.interfaces.OnDeleteListener;
 import com.uzlov.myapplication.interfaces.OnNoteItemClick;
-import com.uzlov.myapplication.interfaces.OnSaveListener;
 import com.uzlov.myapplication.model.Note;
 import com.uzlov.myapplication.repositories.notes.NotesFirestoreRepository;
 import com.uzlov.myapplication.repositories.notes.NotesRepository;

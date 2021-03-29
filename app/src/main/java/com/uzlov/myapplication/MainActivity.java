@@ -14,7 +14,6 @@ import androidx.fragment.app.FragmentTransaction;
 import androidx.navigation.ui.AppBarConfiguration;
 
 import com.google.android.material.navigation.NavigationView;
-import com.uzlov.myapplication.interfaces.OnChangeCurrentNote;
 import com.uzlov.myapplication.model.Note;
 import com.uzlov.myapplication.ui.AddNewNoteFragment;
 import com.uzlov.myapplication.ui.ListNotesFragment;
@@ -133,19 +132,19 @@ public class MainActivity extends AppCompatActivity implements OnChangeCurrentNo
 
     private void showPortNote(Note currentNote) {
         getSupportFragmentManager()
-            .beginTransaction()
-            .replace(R.id.container_fragments, ListNotesFragment.newInstance(this, currentNote))
-            .setTransition(FragmentTransaction.TRANSIT_FRAGMENT_FADE)
-            .commit();
+                .beginTransaction()
+                .replace(R.id.container_fragments, ListNotesFragment.newInstance(this, currentNote))
+                .setTransition(FragmentTransaction.TRANSIT_FRAGMENT_FADE)
+                .commit();
     }
 
     private void showPortNewNote(Note currentNote) {
         getSupportFragmentManager()
-            .beginTransaction()
-            .replace(R.id.container_fragments, NoteFragment.newInstance(currentNote))
-            .setTransition(FragmentTransaction.TRANSIT_FRAGMENT_FADE)
-            .addToBackStack(null)
-            .commit();
+                .beginTransaction()
+                .replace(R.id.container_fragments, NoteFragment.newInstance(currentNote))
+                .setTransition(FragmentTransaction.TRANSIT_FRAGMENT_FADE)
+                .addToBackStack(null)
+                .commit();
     }
 
     private void showAddNewPostFragment(){

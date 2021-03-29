@@ -66,10 +66,11 @@
 
     <com.google.android.material.button.MaterialButton
         android:id="@+id/btnDeleteNote"
-        android:layout_width="0dp"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintLeft_toLeftOf="parent"
+        android:textSize="@dimen/btn_size_text"
         app:layout_constraintRight_toLeftOf="@id/btnSaveNote"
         android:text="@string/action_remove"
         />
@@ -77,21 +78,23 @@
 
     <com.google.android.material.button.MaterialButton
         android:id="@+id/btnSaveNote"
-        android:layout_width="0dp"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintLeft_toRightOf="@id/btnDeleteNote"
         app:layout_constraintRight_toLeftOf="@id/fab_share_note"
         android:text="@string/action_save"
+        android:textSize="@dimen/btn_size_text"
         />
 
 
     <com.google.android.material.button.MaterialButton
         android:id="@+id/fab_share_note"
-        android:layout_width="0dp"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintRight_toRightOf="parent"
         app:layout_constraintLeft_toRightOf="@id/btnSaveNote"
+        android:textSize="@dimen/btn_size_text"
         android:text="@string/share_note"/>
 </androidx.constraintlayout.widget.ConstraintLayout>
