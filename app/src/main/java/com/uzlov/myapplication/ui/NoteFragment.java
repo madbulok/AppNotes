@@ -13,7 +13,7 @@ import androidx.annotation.Nullable;
 import androidx.appcompat.widget.AppCompatImageView;
 import androidx.fragment.app.Fragment;
 
-import com.google.android.material.floatingactionbutton.FloatingActionButton;
+import com.google.android.material.button.MaterialButton;
 import com.google.android.material.timepicker.MaterialTimePicker;
 import com.google.android.material.timepicker.TimeFormat;
 import com.uzlov.myapplication.Note;
@@ -26,7 +26,9 @@ public class NoteFragment extends Fragment{
     private TextView tvName;
     private TextView tvAuthor;
     private EditText etDescription;
-    private FloatingActionButton fabShareNote;
+    private MaterialButton btnShareNote;
+    private MaterialButton btnSaveNote;
+    private MaterialButton btnDeleteNote;
     private AppCompatImageView imageNote;
 
     private static final String ARG_INDEX = "index";
@@ -72,13 +74,28 @@ public class NoteFragment extends Fragment{
         tvAuthor = view.findViewById(R.id.textView_author);
         etDescription = view.findViewById(R.id.etDescription);
         imageNote = view.findViewById(R.id.iv_image_note);
-        fabShareNote = view.findViewById(R.id.fab_share_note);
+        btnShareNote = view.findViewById(R.id.fab_share_note);
+        btnDeleteNote = view.findViewById(R.id.btnDeleteNote);
+        btnSaveNote = view.findViewById(R.id.btnSaveNote);
     }
 
     private void initListeners() {
         tvDate.setOnClickListener(v -> openTimePicker());
+        btnShareNote.setOnClickListener(v -> startShareIntent());
 
-        fabShareNote.setOnClickListener(v -> startShareIntent());
+        btnSaveNote.setOnClickListener(v -> {
+            Bundle result = new Bundle();
+            result.putParcelable(ARG_INDEX, note);
+
+            getParentFragmentManager().setFragmentResult(getString(R.string.key_save), result);
+        });
+
+        btnDeleteNote.setOnClickListener(v -> {
+            Bundle result = new Bundle();
+            result.putParcelable(ARG_INDEX, note);
+            getParentFragmentManager().setFragmentResult(getString(R.string.key_delete), result);
+            requireActivity().onBackPressed();
+        });
     }
 
     private void startShareIntent() {
@@ -102,7 +119,7 @@ public class NoteFragment extends Fragment{
         }
 
         picker.addOnPositiveButtonClickListener(v1 ->
-                tvDate.setText(picker.getHour()+":" + picker.getMinute()));
+                tvDate.setText(picker.getHour() + ":" + picker.getMinute()));
     }
 
     private void fillView() {

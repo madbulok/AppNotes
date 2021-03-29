@@ -18,8 +18,8 @@ import java.util.List;
 
 public class NotesAdapter extends RecyclerView.Adapter<NotesAdapter.NoteViewHolder> {
 
-    private List<Note> notes = new ArrayList<>();
-    private OnNoteItemClick onNoteItemClick;
+    private final List<Note> notes = new ArrayList<>();
+    private final OnNoteItemClick onNoteItemClick;
 
     public NotesAdapter(OnNoteItemClick onNoteItemClick) {
         this.onNoteItemClick = onNoteItemClick;
@@ -52,12 +52,18 @@ public class NotesAdapter extends RecyclerView.Adapter<NotesAdapter.NoteViewHold
         return notes.size();
     }
 
+    public void removeNote(Note note) {
+        int pos = notes.indexOf(note);
+        if (pos != -1 && notes.remove(note)){
+            notifyItemRemoved(pos);
+        }
+    }
 
 
     protected final class NoteViewHolder extends RecyclerView.ViewHolder{
 
-        private AppCompatImageView ivNote;
-        private AppCompatTextView tvNoteTitle;
+        private final AppCompatImageView ivNote;
+        private final AppCompatTextView tvNoteTitle;
 
         public NoteViewHolder(@NonNull View itemView) {
             super(itemView);
@@ -66,6 +72,7 @@ public class NotesAdapter extends RecyclerView.Adapter<NotesAdapter.NoteViewHold
         }
 
         void inBind(Note note){
+            if (note == null) return;
             ivNote.setImageResource(note.getImage());
             tvNoteTitle.setText(note.getName());
             itemView.setOnClickListener(v -> onNoteItemClick.onClick(getAdapterPosition()));
